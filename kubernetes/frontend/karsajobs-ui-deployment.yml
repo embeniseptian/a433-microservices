@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-ui-deployment
+  labels:
+    app: karsajobs-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: karsajobs-ui
+  template:
+    metadata:
+      labels:
+        app: karsajobs-ui
+    spec:
+      containers:
+      - name: frontend
+        image: embeniseptian/karsajobs-ui:latest  # Image frontend
+        ports:
+        - containerPort: 80             # Port aplikasi UI
+        env:
+        - name: VUE_APP_BACKEND         # URL backend untuk frontend
+          value: http://<NodeIP>:30001  # Ganti <NodeIP> sesuai mesin Anda

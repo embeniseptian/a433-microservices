@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: karsajobs-deployment         # Nama Deployment
+  labels:
+    app: karsajobs                   # Label 
+spec:
+  replicas: 2                        # Jumlah replika pod
+  selector:
+    matchLabels:
+      app: karsajobs
+  template:
+    metadata:
+      labels:
+        app: karsajobs
+    spec:
+      containers:
+      - name: backend
+        image: embeniseptian/karsajobs:latest  # Image backend
+        ports:
+        - containerPort: 8080         # Port aplikasi
+        env:
+        - name: APP_PORT
+          value: "8080"
+        - name: MONGO_HOST
+          value: mongo-service        # Nama Service MongoDB
+        - name: MONGO_USER
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_ROOT_USERNAME   # Ambil user dari Secret
+        - name: MONGO_PASS
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: MONGO_ROOT_PASSWORD   # Ambil pass dari Secret
